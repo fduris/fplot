@@ -6,11 +6,23 @@ project(
     VERSION 1.8.2
 )
 
-# Confgiure everything
+# MT project: force shared library build
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+
+# Configure everything
 add_subdirectory(configure)
 
 # Source
 add_subdirectory(src)
+
+# MT project integration - output shared library to MT root directory
+get_filename_component(MT_DIR "${PROJECT_SOURCE_DIR}/../.." ABSOLUTE)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    OUTPUT_NAME fplot
+    LIBRARY_OUTPUT_DIRECTORY ${MT_DIR}
+    RUNTIME_OUTPUT_DIRECTORY ${MT_DIR}
+    ARCHIVE_OUTPUT_DIRECTORY ${MT_DIR}
+)
 
 # Install
 install(
